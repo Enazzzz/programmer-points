@@ -29,11 +29,15 @@ export async function initSchema() {
 	await sql`
 		CREATE TABLE IF NOT EXISTS people (
 			id SERIAL PRIMARY KEY,
-			name TEXT NOT NULL UNIQUE,
+			name TEXT NOT NULL,
 			points INTEGER NOT NULL DEFAULT 0,
+			github_id TEXT UNIQUE,
 			created_at TIMESTAMPTZ DEFAULT NOW()
 		)
 	`;
+	// Migration: add github_id if table existed before
+	await sql`ALTER TABLE people ADD COLUMN IF NOT EXISTS github_id TEXT UNIQUE`;
+	await sql`DROP INDEX IF EXISTS people_name_key`;
 	await sql`
 		CREATE TABLE IF NOT EXISTS redeems (
 			id SERIAL PRIMARY KEY,

@@ -9,7 +9,7 @@ const config: Config = {
 				mono: ["var(--font-mono)", "ui-monospace", "monospace"],
 			},
 			colors: {
-				accent: { DEFAULT: "#f59e0b", dark: "#d97706", muted: "#fbbf2433" },
+				accent: { DEFAULT: "#f97316", dark: "#ea580c", hotwire: "#dc2626" },
 				surface: "#0f0f13",
 				card: "#18181d",
 				border: "#27272a",
@@ -29,7 +29,7 @@ const config: Config = {
 				},
 			},
 			boxShadow: {
-				glow: "0 0 40px -12px rgba(245, 158, 11, 0.25)",
+				glow: "0 0 40px -12px rgba(249, 115, 22, 0.3)",
 				card: "0 4px 24px -4px rgba(0, 0, 0, 0.4)",
 				inner: "inset 0 1px 0 0 rgba(255, 255, 255, 0.05)",
 			},

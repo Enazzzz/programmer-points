@@ -1,5 +1,5 @@
 /**
- * NextAuth config - GitHub-only sign in, restricted to admin from config.
+ * NextAuth config - GitHub sign in. All users can sign in; admin from config.
  */
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
@@ -8,23 +8,31 @@ import { ADMIN_GITHUB_USERNAME } from "./config/admin";
 export const { handlers, auth, signIn, signOut } = NextAuth({
 	providers: [
 		GitHub({
-			clientId: process.env.GITHUB_CLIENT_ID!,
-			clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+			clientId: process.env.GITHUB_CLIENT_ID ?? "",
+			clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
 		}),
 	],
+	trustHost: true,
+	secret: process.env.AUTH_SECRET || (process.env.NODE_ENV === "development" ? "dev-secret-min-32-chars-required!!" : undefined),
 	pages: {
-		signIn: "/admin/login",
-		error: "/admin/login",
+		signIn: "/login",
+		error: "/login",
 	},
 	callbacks: {
-		signIn({ profile }) {
-			const login = (profile as { login?: string })?.login;
-			if (!login) return false;
-			return login.toLowerCase() === ADMIN_GITHUB_USERNAME.toLowerCase();
+		signIn() {
+			return true;
 		},
-		session({ session }) {
-			// Only allowed user can sign in, so if they have a session they're admin
-			return { ...session, isAdmin: true };
+		async session({ session, token }) {
+			const login = (token as { login?: string }).login ?? "";
+			const isAdmin = login.toLowerCase() === ADMIN_GITHUB_USERNAME.toLowerCase();
+			return { ...session, isAdmin, githubId: token.sub as string };
+		},
+		async jwt({ token, profile }) {
+			if (profile) {
+				token.login = (profile as { login?: string }).login;
+				token.githubId = (profile as { id?: number }).id;
+			}
+			return token;
 		},
 	},
 });

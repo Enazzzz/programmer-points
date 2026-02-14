@@ -8,7 +8,7 @@ const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" }
 
 export const metadata: Metadata = {
 	title: "Programmer Points",
-	description: "Track programmer points as a currency",
+	description: "HotwireRobotics programming team – track programmer points",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

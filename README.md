@@ -1,12 +1,13 @@
-# Programmer Points
+# HotwireRobotics Programmer Points
 
-A Vercel-deployable website that tracks **programmer points** as a currency. One admin can log in to give points, add people, and add/manage redeems.
+A Vercel-deployable website for **HotwireRobotics** programming team – track programmer points as a currency. One admin can log in to give points, add people, and add/manage redeems.
 
 ## Features
 
-- **Public leaderboard** – See everyone's points and redeem options
-- **Admin-only actions** – Add people, give points, add redeems, process redeems
-- **Single admin login** – Sign in with GitHub only; admin set in `config/admin.ts`
+- **Public leaderboard** – See everyone's points
+- **Store** – View redeems; sign in with GitHub to redeem
+- **User accounts** – Anyone can sign in with GitHub; points are linked to your account
+- **Admin dashboard** – Add people, give points, add redeems (admin set in `config/admin.ts`)
 - **Neon Postgres** – Persistent storage via Vercel Neon integration
 
 ## Quick Start (Local)

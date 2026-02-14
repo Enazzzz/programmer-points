@@ -46,7 +46,7 @@ export default function AdminPage() {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-mesh">
 				<div className="flex flex-col items-center">
-					<div className="h-8 w-8 animate-spin rounded-full border-2 border-amber-500/30 border-t-amber-500" />
+					<div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500/30 border-t-orange-500" />
 					<p className="mt-4 text-sm text-zinc-500">Checking auth...</p>
 				</div>
 			</div>
@@ -54,7 +54,7 @@ export default function AdminPage() {
 	}
 
 	if (!isAdmin) {
-		router.replace("/admin/login?redirect=/admin");
+		router.replace("/login?callbackUrl=/admin");
 		return null;
 	}
 
@@ -73,8 +73,8 @@ export default function AdminPage() {
 		<div className="min-h-screen bg-mesh">
 			<header className="sticky top-0 z-10 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-xl">
 				<div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5">
-					<h1 className="font-display text-2xl font-bold tracking-tight text-amber-400">
-						◇ Admin Dashboard
+					<h1 className="font-display text-2xl font-bold tracking-tight text-orange-400">
+						◇ Admin · HotwireRobotics
 					</h1>
 					<div className="flex items-center gap-2">
 						<button
@@ -91,8 +91,8 @@ export default function AdminPage() {
 							View leaderboard
 						</Link>
 						<button
-							onClick={() => signOut({ callbackUrl: "/admin/login" })}
-							className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-400 transition-colors hover:border-red-500/30 hover:bg-zinc-800 hover:text-red-400"
+							onClick={() => signOut({ callbackUrl: "/" })}
+							className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-400 transition-colors hover:border-red-500/50 hover:bg-zinc-800 hover:text-red-400"
 						>
 							Log out
 						</button>
@@ -101,25 +101,35 @@ export default function AdminPage() {
 			</header>
 
 			<main className="mx-auto max-w-5xl px-4 py-10">
-				<div className="grid gap-6 lg:grid-cols-2">
-					{/* Give points - quick action */}
-					<GivePointsCard
-						people={people}
-						onSuccess={() => setRefresh((r) => r + 1)}
-					/>
+				<div className="space-y-8">
+					{/* Quick actions - most common */}
+					<section>
+						<h2 className="mb-4 font-display text-lg font-semibold text-zinc-300">
+							Quick actions
+						</h2>
+						<div className="grid gap-6 lg:grid-cols-2">
+							<GivePointsCard
+								people={people}
+								onSuccess={() => setRefresh((r) => r + 1)}
+							/>
+							<AddPersonCard onSuccess={() => setRefresh((r) => r + 1)} />
+						</div>
+					</section>
 
-					{/* Add person */}
-					<AddPersonCard onSuccess={() => setRefresh((r) => r + 1)} />
-
-					{/* Add redeem */}
-					<AddRedeemCard onSuccess={() => setRefresh((r) => r + 1)} />
-
-					{/* Process redeem */}
-					<ProcessRedeemCard
-						people={people}
-						redeems={redeems}
-						onSuccess={() => setRefresh((r) => r + 1)}
-					/>
+					{/* Store management */}
+					<section>
+						<h2 className="mb-4 font-display text-lg font-semibold text-zinc-300">
+							Store & redeems
+						</h2>
+						<div className="grid gap-6 lg:grid-cols-2">
+							<AddRedeemCard onSuccess={() => setRefresh((r) => r + 1)} />
+							<ProcessRedeemCard
+								people={people}
+								redeems={redeems}
+								onSuccess={() => setRefresh((r) => r + 1)}
+							/>
+						</div>
+					</section>
 				</div>
 			</main>
 		</div>
@@ -178,7 +188,7 @@ function GivePointsCard({
 					<select
 						value={personId}
 						onChange={(e) => setPersonId(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						required
 					>
 						<option value="">Select...</option>
@@ -191,13 +201,28 @@ function GivePointsCard({
 				</div>
 				<div>
 					<label className="mb-2 block text-sm font-medium text-zinc-400">Amount</label>
+					<div className="flex flex-wrap gap-2">
+						{[5, 10, 25, 50, 100].map((n) => (
+							<button
+								key={n}
+								type="button"
+								onClick={() => setAmount(String(n))}
+								className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+									amount === String(n)
+										? "bg-orange-500 text-zinc-900"
+										: "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+								}`}
+							>
+								{n}
+							</button>
+						))}
+					</div>
 					<input
 						type="number"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
-						placeholder="10"
-						required
+						className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
+						placeholder="Or enter custom"
 					/>
 				</div>
 				<div>
@@ -206,7 +231,7 @@ function GivePointsCard({
 						type="text"
 						value={note}
 						onChange={(e) => setNote(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						placeholder="e.g. code review"
 					/>
 				</div>
@@ -218,7 +243,7 @@ function GivePointsCard({
 				<button
 					type="submit"
 					disabled={loading || people.length === 0}
-					className="w-full rounded-xl bg-amber-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-amber-400 hover:shadow-glow disabled:opacity-50"
+					className="w-full rounded-xl bg-orange-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-orange-400 hover:shadow-glow disabled:opacity-50"
 				>
 					{loading ? "Sending..." : "Give points"}
 				</button>
@@ -266,7 +291,7 @@ function AddPersonCard({ onSuccess }: { onSuccess: () => void }) {
 						type="text"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						placeholder="Jane"
 						required
 					/>
@@ -279,7 +304,7 @@ function AddPersonCard({ onSuccess }: { onSuccess: () => void }) {
 				<button
 					type="submit"
 					disabled={loading}
-					className="w-full rounded-xl bg-amber-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-amber-400 hover:shadow-glow disabled:opacity-50"
+					className="w-full rounded-xl bg-orange-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-orange-400 hover:shadow-glow disabled:opacity-50"
 				>
 					{loading ? "Adding..." : "Add person"}
 				</button>
@@ -335,19 +360,35 @@ function AddRedeemCard({ onSuccess }: { onSuccess: () => void }) {
 						type="text"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						placeholder="Coffee run"
 						required
 					/>
 				</div>
 				<div>
 					<label className="mb-2 block text-sm font-medium text-zinc-400">Cost (points)</label>
+					<div className="flex flex-wrap gap-2">
+						{[10, 25, 50, 100, 200].map((n) => (
+							<button
+								key={n}
+								type="button"
+								onClick={() => setCost(String(n))}
+								className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+									cost === String(n)
+										? "bg-orange-500 text-zinc-900"
+										: "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+								}`}
+							>
+								{n}
+							</button>
+						))}
+					</div>
 					<input
 						type="number"
 						value={cost}
 						onChange={(e) => setCost(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
-						placeholder="25"
+						className="mt-2 w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
+						placeholder="Or enter custom"
 						min="1"
 						required
 					/>
@@ -358,7 +399,7 @@ function AddRedeemCard({ onSuccess }: { onSuccess: () => void }) {
 						type="text"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						placeholder="Team buys you coffee"
 					/>
 				</div>
@@ -370,7 +411,7 @@ function AddRedeemCard({ onSuccess }: { onSuccess: () => void }) {
 				<button
 					type="submit"
 					disabled={loading}
-					className="w-full rounded-xl bg-amber-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-amber-400 hover:shadow-glow disabled:opacity-50"
+					className="w-full rounded-xl bg-orange-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-orange-400 hover:shadow-glow disabled:opacity-50"
 				>
 					{loading ? "Adding..." : "Add redeem"}
 				</button>
@@ -430,7 +471,7 @@ function ProcessRedeemCard({
 					<select
 						value={personId}
 						onChange={(e) => setPersonId(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						required
 					>
 						<option value="">Select...</option>
@@ -446,7 +487,7 @@ function ProcessRedeemCard({
 					<select
 						value={redeemId}
 						onChange={(e) => setRedeemId(e.target.value)}
-						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-amber-500/50"
+						className="w-full rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2.5 text-zinc-100 transition-colors focus:border-orange-500/50"
 						required
 					>
 						<option value="">Select...</option>
@@ -465,7 +506,7 @@ function ProcessRedeemCard({
 				<button
 					type="submit"
 					disabled={loading || people.length === 0 || redeems.length === 0}
-					className="w-full rounded-xl bg-amber-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-amber-400 hover:shadow-glow disabled:opacity-50"
+					className="w-full rounded-xl bg-orange-500 py-3 font-semibold text-zinc-900 transition-all hover:bg-orange-400 hover:shadow-glow disabled:opacity-50"
 				>
 					{loading ? "Processing..." : "Process redeem"}
 				</button>

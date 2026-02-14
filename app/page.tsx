@@ -39,22 +39,39 @@ export default function HomePage() {
 		<div className="min-h-screen bg-mesh">
 			<header className="sticky top-0 z-10 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-xl">
 				<div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
-					<h1 className="font-display text-2xl font-bold tracking-tight text-amber-400 drop-shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-						◇ Programmer Points
-					</h1>
-					<Link
-						href="/admin"
-						className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-amber-500/50 hover:bg-zinc-800 hover:text-amber-400"
-					>
-						Admin
+					<Link href="/" className="flex flex-col">
+						<span className="font-display text-2xl font-bold tracking-tight text-orange-400 drop-shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+							◇ HotwireRobotics
+						</span>
+						<span className="text-xs font-medium text-zinc-500">Programmer Points</span>
 					</Link>
+					<nav className="flex items-center gap-2">
+						<Link
+							href="/store"
+							className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+						>
+							Store
+						</Link>
+						<Link
+							href="/admin"
+							className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+						>
+							Admin
+						</Link>
+						<Link
+							href="/login"
+							className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-orange-500/50 hover:text-orange-400"
+						>
+							Sign in
+						</Link>
+					</nav>
 				</div>
 			</header>
 
 			<main className="mx-auto max-w-3xl px-4 py-14">
 				{loading ? (
 					<div className="flex flex-col items-center justify-center py-24">
-						<div className="h-8 w-8 animate-spin rounded-full border-2 border-amber-500/30 border-t-amber-500" />
+						<div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500/30 border-t-orange-500" />
 						<p className="mt-4 text-sm text-zinc-500">Loading leaderboard...</p>
 					</div>
 				) : (
@@ -91,7 +108,7 @@ export default function HomePage() {
 															{p.name}
 														</span>
 													</div>
-													<span className="rounded-lg bg-amber-500/10 px-3 py-1 font-mono text-sm font-semibold text-amber-400">
+													<span className="rounded-lg bg-orange-500/10 px-3 py-1 font-mono text-sm font-semibold text-orange-400">
 														{p.points} pts
 													</span>
 												</li>
@@ -103,9 +120,17 @@ export default function HomePage() {
 						</section>
 
 						<section className="mt-16 animate-fade-in">
-							<h2 className="mb-5 flex items-center gap-2 font-display text-xl font-semibold text-zinc-200">
-								<span className="text-2xl">🎁</span> Redeem Options
-							</h2>
+							<div className="mb-5 flex items-center justify-between">
+								<h2 className="flex items-center gap-2 font-display text-xl font-semibold text-zinc-200">
+									<span className="text-2xl">🎁</span> Redeem Options
+								</h2>
+								<Link
+									href="/store"
+									className="text-sm font-medium text-orange-400 hover:text-orange-300"
+								>
+									Go to Store →
+								</Link>
+							</div>
 							<div className="grid gap-4 sm:grid-cols-2">
 								{redeems.length === 0 ? (
 									<div className="col-span-2 rounded-2xl border border-zinc-800 bg-zinc-900/50 px-8 py-12 text-center text-zinc-500 shadow-card">
@@ -116,7 +141,7 @@ export default function HomePage() {
 									redeems.map((r) => (
 										<div
 											key={r.id}
-											className="group rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5 shadow-card transition-all hover:border-amber-500/30 hover:shadow-glow"
+											className="group rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5 shadow-card transition-all hover:border-orange-500/30 hover:shadow-glow"
 										>
 											<div className="flex items-start justify-between gap-3">
 												<div className="min-w-0 flex-1">
@@ -129,7 +154,7 @@ export default function HomePage() {
 														</p>
 													)}
 												</div>
-												<span className="shrink-0 rounded-lg bg-amber-500/10 px-2.5 py-1 font-mono text-sm font-semibold text-amber-400 group-hover:bg-amber-500/20">
+												<span className="shrink-0 rounded-lg bg-orange-500/10 px-2.5 py-1 font-mono text-sm font-semibold text-orange-400 group-hover:bg-red-500/20">
 													{r.cost} pts
 												</span>
 											</div>
